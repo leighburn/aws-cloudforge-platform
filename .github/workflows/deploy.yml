@@ -23,5 +23,21 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "Connected to EC2 successfully"
-            docker --version
+            set -e
+
+            if [ ! -d "$HOME/aws-cloudforge-platform/.git" ]; then
+              git clone https://github.com/leighburn/aws-cloudforge-platform.git "$HOME/aws-cloudforge-platform"
+            fi
+
+            cd "$HOME/aws-cloudforge-platform"
+            git pull --ff-only origin main
+
+            sudo docker build -t cloudforge .
+            sudo docker rm -f cloudforge || true
+            sudo docker run -d \
+              --name cloudforge \
+              --restart unless-stopped \
+              -p 80:80 \
+              cloudforge
+
+            sudo docker ps
