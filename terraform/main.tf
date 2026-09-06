@@ -8,29 +8,29 @@ resource "aws_vpc" "cloudforge_vpc" {
   }
 }
 resource "aws_subnet" "public_subnet" {
-    vpc_id = aws_vpc.cloudforge_vpc.id
-    cidr_block = "10.0.1.0/24"
-    map_public_ip_on_launch = true
-    tags = {
-  Name = "cloudforge-public-subnet"
-}
+  vpc_id                  = aws_vpc.cloudforge_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "cloudforge-public-subnet"
+  }
 }
 
 resource "aws_internet_gateway" "cloudforge_igw" {
   vpc_id = aws_vpc.cloudforge_vpc.id
   tags = {
-  Name = "cloudforge-igw"
-}
+    Name = "cloudforge-igw"
+  }
 }
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.cloudforge_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.cloudforge_igw.id
-    }
-    tags = {
-  Name = "cloudforge-public-rt"
-}
+  }
+  tags = {
+    Name = "cloudforge-public-rt"
+  }
 }
 resource "aws_route_table_association" "public_assoc" {
   subnet_id      = aws_subnet.public_subnet.id
@@ -75,7 +75,7 @@ resource "aws_security_group" "cloudforge_sg" {
   tags = {
     Name = "cloudforge-sg"
   }
-}# Latest Ubuntu AMI
+} # Latest Ubuntu AMI
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"]
