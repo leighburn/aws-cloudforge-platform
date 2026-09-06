@@ -1,6 +1,6 @@
 name: Terraform CI
 
-name: Terraform CI
+
 
 on:
   push:
