@@ -167,7 +167,16 @@ aws-cloudforge-platform
 - Kubernetes Deployment
 
 ---
+## CI/CD and Security
 
+This project uses GitHub Actions to automate quality and security checks before code is merged.
+
+- **Terraform CI** checks Terraform formatting with `terraform fmt`.
+- **Terraform Validate** verifies that the infrastructure configuration is valid.
+- **TFLint** detects Terraform quality issues and configuration problems.
+- **Trivy** scans the Docker image for HIGH and CRITICAL vulnerabilities.
+- **GitHub pull requests** provide a controlled review and testing process.
+- **GHCR** automatically stores the published Docker image.
 # 👨‍💻 Author
 
 **Liban Abdullahi**
