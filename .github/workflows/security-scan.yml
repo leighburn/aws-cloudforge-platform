@@ -1,0 +1,29 @@
+name: Trivy Security Scan
+
+on:
+  push:
+    branches:
+      - main
+      - feature/trivy-security-scan
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Build Docker image
+        run: docker build -t cloudforge:scan .
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: cloudforge:scan
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: '0'
