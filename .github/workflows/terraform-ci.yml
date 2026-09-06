@@ -1,9 +1,11 @@
 name: Terraform CI
 
+
+
 on:
   push:
     branches:
-      - feature/terraform-ci
+      - main
     paths:
       - "terraform/**"
       - ".github/workflows/terraform-ci.yml"
@@ -29,6 +31,15 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
+
+      - name: Set up TFLint
+        uses: terraform-linters/setup-tflint@v5
+
+      - name: Initialise TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint --format compact
 
       - name: Terraform format check
         run: terraform fmt -check
