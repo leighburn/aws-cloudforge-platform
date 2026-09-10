@@ -4,7 +4,7 @@ resource "aws_vpc" "cloudforge_vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "cloudforge-vpc"
+    Name = "cloudforge-${var.environment}-vpc"
   }
 }
 resource "aws_subnet" "public_subnet" {
