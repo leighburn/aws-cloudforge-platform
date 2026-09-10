@@ -1,5 +1,5 @@
 resource "aws_vpc" "cloudforge_vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -9,7 +9,7 @@ resource "aws_vpc" "cloudforge_vpc" {
 }
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.cloudforge_vpc.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = var.subnet_cidr
   map_public_ip_on_launch = true
   tags = {
     Name = "cloudforge-public-subnet"
@@ -46,7 +46,7 @@ resource "aws_security_group" "cloudforge_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.ssh_allowed_cidr]
   }
 
   ingress {
@@ -94,7 +94,7 @@ data "aws_ami" "ubuntu" {
 # EC2 Instance
 resource "aws_instance" "cloudforge_ec2" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t3.micro"
+  instance_type          = var.instance_type
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.cloudforge_sg.id]
 
